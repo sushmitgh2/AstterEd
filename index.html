@@ -2,6 +2,8 @@
 <html class="no-js" lang="">
     <head>
 
+        <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+
         <style>
 
            html{
@@ -83,9 +85,8 @@
                                         </ul>
                                     </div>
                                     <div class="header-action d-none d-md-block">
-                                        <ul>
-                                                                                      
-                                            <li class="header-btn"><a href="#" class="btn">Wallet</a></li>
+                                        <ul>                                               
+                                            <li class="header-btn"><button id="walletBtn" class="btn">Wallet</button></li>
                                         </ul>
                                     </div>
                                 </nav>
@@ -299,6 +300,34 @@
 
 
 		<!-- JS here -->
+        <script>
+            var walletBtn = document.getElementById('walletBtn');
+            var accounts; 
+
+            walletBtn.addEventListener("click", async () => {
+                if(window.ethereum){
+                    try{
+                        web3 = new Web3(window.ethereum);
+                        if(await web3.eth.getAccounts() == null){
+                            await window.ethereum.enable();
+                        }
+
+                        var net_id = await web3.eth.net.getId();
+                        if(net_id == 43113){
+                            accounts = await web3.eth.getAccounts();
+                            walletBtn.innerText = accounts[0].substring(0, 5) + "..." + accounts[0].substring(38, 42);
+                            console.log(accounts[0]);
+                        }else{
+                            alert("Please switch to Avalanche Fuji Testnet");
+                        }
+                    }catch(err){
+                        alert(err);
+                    }
+                }else{
+                    alert("Please install a web3 wallet to proceed");
+                }
+            })
+        </script>
         <script src="js/vendor/jquery-3.6.0.min.js"></script>
         <script src="js/popper.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
