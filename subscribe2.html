@@ -1,12 +1,8 @@
 <!doctype html>
 <html class="no-js" lang="">
     <head>
-
         <style>
-
-           html{
-            scroll-behavior: smooth;
-           }
+           
 
     ::-webkit-scrollbar{
             width: 8px;
@@ -22,8 +18,6 @@
             background-color: white;
             box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
         }
-
-
     </style>
 
         <meta charset="utf-8">
@@ -49,16 +43,11 @@
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/responsive.css">
     </head>
-    <body>
+    <body style="background-color: #141414;">
 
-       
-		<!-- Scroll-top -->
-        <button class="scroll-top scroll-to-target" data-target="html">
-            <i class="fas fa-angle-up"></i>
-        </button>
-        <!-- Scroll-top-end-->
 
-       <header>
+		
+         <header>
             <div id="sticky-header" class="menu-area transparent-header">
                 <div class="container custom-container">
                     <div class="row">
@@ -73,7 +62,7 @@
                                     </div>
                                     <div class="navbar-wrap main-menu d-none d-lg-flex">
                                         <ul class="navigation">
-                                            <li><a href="subscribe.html">Subscription</a>
+                                            <li class="active menu-item"><a href="subscribe.html">Subscription</a>
                                             </li>
                                             <li><a href="courses.html">Courses</a>
                                             </li>
@@ -128,57 +117,36 @@
         <!-- main-area -->
         <main>
 
-           
-            <!-- episode-area -->
-            <section class="episode-area episode-bg" style="background-color: #141414;">
 
+            <!-- pricing-area -->
+            <section class="pricing-area pricing-bg" style="background-color: #141414;">
                 <div class="container">
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <div class="episode-img">
-                                <img src="img/images/poster2.jpg" style="padding-top: 20%;" alt="">
-                            </div>
-                        </div>
-                        <div class="col-lg-8">
-                            <div class="movie-episode-wrap">
-                                <div class="episode-top-wrap">
-                                    <div class="section-title">
-                                        <br><br>
+                    
+                    <div class="pricing-box-wrap">
+                        <div class="row justify-content-center">
+                            
+                            <div class="col-lg-4 col-md-6 col-sm-8">
+                                <div class="pricing-box-item active mb-30" style="margin-top: 10%;">
+                                    <div class="pricing-top">
+                                        <h6 style="line-height: 1.6;">You already have an active subscription.</h6>
                                         
-                                        <h2 class="title">Meme Investing</h2>
                                     </div>
-                                    <div class="total-views-count">
-                                        <p>Reward: 500 astter</p>
+                                
+                                    <div class="pricing-btn">
+                                        <a href="dashboard.html" class="btn">Go to dashboard</a>
                                     </div>
-                                </div>
-                                <div class="episode-watch-wrap">
-                                    <div class="accordion" id="accordionExample">
-                                        <div class="card">
-                                            <div class="card-header" id="headingOne">
-                                                
-                                                    <span class="season"><b style="color: white;">Chapters</b></span>
-                                                    
-                                                </button>
-                                            </div>
-                                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-                                                <div class="card-body">
-                                                    <ul>
-                                                        <li><a href="" class="popup-video"><i class="fas fa-play"></i> Episode 1 - The Power of Retail Investors</a> <span class="duration"><i class="far fa-clock"></i> 28 Min</span></li>
-                                                        <li><a href="" class="popup-video"><i class="fas fa-play"></i> Episode 2 - Dogecoin Case Study</a> <span class="duration"><i class="far fa-clock"></i> 28 Min</span></li>
-                                                        <li><a href="" class="popup-video"><i class="fas fa-play"></i> Episode 3 - Meme Investing Here to Stay?</a> <span class="duration"><i class="far fa-clock"></i> 28 Min</span></li>
-                                                        <li><a href="" class="popup-video"><i class="fas fa-play"></i> Episode 4 - NFT Memes</a> <span class="duration"><i class="far fa-clock"></i> 28 Min</span></li>
-                                                        <li><a href=""><i class="fas fa-edit"></i>Start Assignment </a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                       
                                 </div>
                             </div>
+                            
                         </div>
-                        
                     </div>
-        
+                </div>
+            </section>
+            <!-- pricing-area-end -->
+
+           
+        </main>
+        <!-- main-area-end -->
 
 
 

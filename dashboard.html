@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <style>
+
+           html{
+            scroll-behavior: smooth;
+           }
+
+    ::-webkit-scrollbar{
+            width: 8px;
+            background-color: black;
+        }
+
+        ::-webkit-scrollbar-thumb{
+            background-color: #25caa3;
+            box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        }
+
+         ::-webkit-scrollbar-track{
+            background-color: white;
+            box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        }
+
+
+    </style>
+     <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/animate.min.css">
+        <link rel="stylesheet" href="css/magnific-popup.css">
+        <link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/owl.carousel.min.css">
+        <link rel="stylesheet" href="css/flaticon.css">
+        <link rel="stylesheet" href="css/odometer.css">
+        <link rel="stylesheet" href="css/aos.css">
+        <link rel="stylesheet" href="css/slick.css">
+        <link rel="stylesheet" href="css/default.css">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/responsive.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
+  <link rel="shortcut icon" type="image/x-icon" href="img/favicon.png">
+  <title>
+    AstterEd
+  </title>
+  <!--     Fonts and icons     -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+  <!-- Nucleo Icons -->
+  <link href="assets/css/nucleo-icons.css" rel="stylesheet" />
+  <link href="assets/css/nucleo-svg.css" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <link href="assets/css/nucleo-svg.css" rel="stylesheet" />
+  <!-- CSS Files -->
+  <link id="pagestyle" href="assets/css/soft-ui-dashboard.css?v=1.0.3" rel="stylesheet" />
+</head>
+
+<body style="background-color: #141414;">
+  
+     <header>
+            <div id="sticky-header" class="menu-area transparent-header">
+                <div class="container custom-container">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="mobile-nav-toggler"><i class="fas fa-bars"></i></div>
+                            <div class="menu-wrap">
+                                <nav class="menu-nav show">
+                                    <div class="logo">
+                                        <a href="index.html">
+                                            <img src="img/logo/logo.png" alt="Logo">
+                                        </a>
+                                    </div>
+                                    <div class="navbar-wrap main-menu d-none d-lg-flex">
+                                        <ul class="navigation">
+                                             <li><a href="subscribe.html">Subscription</a>
+                                            </li>
+                                            <li><a href="courses.html">Courses</a>
+                                            </li>
+                                            <li class="active menu-item"><a href="dashboard.html">Dashboard</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="header-action d-none d-md-block">
+                                        <ul>
+                                                                                      
+                                            <li class="header-btn"><a href="#" class="btn">Wallet</a></li>
+                                        </ul>
+                                    </div>
+                                </nav>
+                            </div>
+
+                            <!-- Mobile Menu  -->
+                            <div class="mobile-menu">
+                                <div class="close-btn"><i class="fas fa-times"></i></div>
+
+                                <nav class="menu-box">
+                                    <div class="nav-logo"><a href="index.html"><img src="img/logo/logo.png" alt="" title=""></a>
+                                    </div>
+                                    <div class="menu-outer">
+                                        <!--Here Menu Will Come Automatically Via Javascript / Same Menu as in Header-->
+                                    </div>
+                                </nav>
+                            </div>
+                            <div class="menu-backdrop"></div>
+                            <!-- End Mobile Menu -->
+
+                            <!-- Modal Search -->
+                            <div class="modal fade" id="search-modal" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <form>
+                                            <input type="text" placeholder="Search here...">
+                                            <button><i class="fas fa-search"></i></button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Modal Search-end -->
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- header-area-end -->
+  <main style="margin-top: 8%; margin-left: 10%; margin-right: 10%;">
+    
+            <div class="container-fluid py-4">
+      <div class="row">
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+          <div class="card">
+            <div class="card-body p-3">
+              <div class="row">
+                <div class="col-8">
+                  <div class="numbers">
+                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Today's Money</p>
+                    <h5 class="font-weight-bolder mb-0">
+                      $53,000
+                    </h5>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+          <div class="card">
+            <div class="card-body p-3">
+              <div class="row">
+                <div class="col-8">
+                  <div class="numbers">
+                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Today's Users</p>
+                    <h5 class="font-weight-bolder mb-0">
+                      2,300
+                      
+                    </h5>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+          <div class="card">
+            <div class="card-body p-3">
+              <div class="row">
+                <div class="col-8">
+                  <div class="numbers">
+                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Today's Users</p>
+                    <h5 class="font-weight-bolder mb-0">
+                      2,300
+                      
+                    </h5>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-xl-3 col-sm-6">
+          <div class="card">
+            <div class="card-body p-3">
+              <div class="row">
+                <div class="col-8">
+                  <div class="numbers">
+                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Sales</p>
+                    <h5 class="font-weight-bolder mb-0">
+                      $103,430
+                      
+                    </h5>
+                  </div>
+                </div>
+               
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+     
+       
+        <div class="row my-4">
+        <div>
+          <div class="card">
+            <div class="card-header pb-0">
+              <div class="row">
+                <div class="col-lg-6 col-7">
+                  <p class="text-sm mb-0">
+                    <span class="font-weight-bold ms-1">Project Dashboard</span>
+                  </p>
+                </div>
+               
+              </div>
+            </div>
+            <div class="card-body px-0 pb-2">
+              <div class="table-responsive">
+                <table class="table align-items-center mb-0">
+                  
+                  <tbody>
+                    <tr>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div>
+                            <img src="assets/img/small-logos/logo-xd.svg" class="avatar avatar-sm me-3" alt="xd">
+                          </div>
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Soft UI XD Version</h6>
+                          </div>
+                        </div>
+                      </td>
+                        <td class="align-middle text-center text-sm">
+                        <span class="text-xs font-weight-bold"> $14,000 </span>
+                      </td>
+                      
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div>
+                            <img src="assets/img/small-logos/logo-atlassian.svg" class="avatar avatar-sm me-3" alt="atlassian">
+                          </div>
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Add Progress Track</h6>
+                          </div>
+                        </div>
+                      </td>
+                      
+                      <td class="align-middle text-center text-sm">
+                        <span class="text-xs font-weight-bold"> $3,000 </span>
+                      </td>
+                     
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div>
+                            <img src="assets/img/small-logos/logo-slack.svg" class="avatar avatar-sm me-3" alt="team7">
+                          </div>
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Fix Platform Errors</h6>
+                          </div>
+                        </div>
+                      </td>
+                      
+                      <td class="align-middle text-center text-sm">
+                        <span class="text-xs font-weight-bold"> Not set </span>
+                      </td>
+                      
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div>
+                            <img src="assets/img/small-logos/logo-spotify.svg" class="avatar avatar-sm me-3" alt="spotify">
+                          </div>
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Launch our Mobile App</h6>
+                          </div>
+                        </div>
+                      </td>
+                     
+                      <td class="align-middle text-center text-sm">
+                        <span class="text-xs font-weight-bold"> $20,500 </span>
+                      </td>
+                     
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div>
+                            <img src="assets/img/small-logos/logo-jira.svg" class="avatar avatar-sm me-3" alt="jira">
+                          </div>
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Add the New Pricing Page</h6>
+                          </div>
+                        </div>
+                      </td>
+                      
+                      <td class="align-middle text-center text-sm">
+                        <span class="text-xs font-weight-bold"> $500 </span>
+                      </td>
+                     
+                    </tr>
+                    
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+       
+      
+    </div>
+  </main>
+  
+  <!--   Core JS Files   -->
+  <script src="assets/js/core/popper.min.js"></script>
+  <script src="assets/js/core/bootstrap.min.js"></script>
+  <script src="assets/js/plugins/perfect-scrollbar.min.js"></script>
+  <script src="assets/js/plugins/smooth-scrollbar.min.js"></script>
+  <script src="assets/js/plugins/chartjs.min.js"></script>
+  
+  
+
+  <script src="js/vendor/jquery-3.6.0.min.js"></script>
+        <script src="js/popper.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/isotope.pkgd.min.js"></script>
+        <script src="js/imagesloaded.pkgd.min.js"></script>
+        <script src="js/jquery.magnific-popup.min.js"></script>
+        <script src="js/owl.carousel.min.js"></script>
+        <script src="js/jquery.odometer.min.js"></script>
+        <script src="js/jquery.appear.js"></script>
+        <script src="js/slick.min.js"></script>
+        <script src="js/ajax-form.js"></script>
+        <script src="js/wow.min.js"></script>
+        <script src="js/aos.js"></script>
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
+</body>
+
+</html>
