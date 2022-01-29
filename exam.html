@@ -1,0 +1,229 @@
+<!doctype html>
+    <html class="no-js" lang="">
+    <head>
+
+        <style>
+
+        html{
+            scroll-behavior: smooth;
+        }
+
+        ::-webkit-scrollbar{
+            width: 8px;
+            background-color: black;
+        }
+
+        ::-webkit-scrollbar-thumb{
+            background-color: #25caa3;
+            box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        }
+
+        ::-webkit-scrollbar-track{
+            background-color: white;
+            box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        }
+
+        .container1 {
+          display: block;
+          position: relative;
+          padding-left: 35px;
+          margin-bottom: 12px;
+          cursor: pointer;
+          font-size: 22px;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+      }
+
+      /* Hide the browser's default checkbox */
+      .container1 input {
+          position: absolute;
+          opacity: 0;
+          cursor: pointer;
+          height: 0;
+          width: 0;
+      }
+
+      /* Create a custom checkbox */
+      .checkmark {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 20px;
+          width: 20px;
+          background-color: #eee;
+      }
+
+      /* On mouse-over, add a grey background color */
+      .container1:hover input ~ .checkmark {
+          background-color: #ccc;
+      }
+
+      /* When the checkbox is checked, add a blue background */
+      .container1 input:checked ~ .checkmark {
+          background-color: #2196F3;
+      }
+
+      /* Create the checkmark/indicator (hidden when not checked) */
+      .checkmark:after {
+          content: "";
+          position: absolute;
+          display: none;
+      }
+
+      /* Show the checkmark when checked */
+      .container1 input:checked ~ .checkmark:after {
+          display: block;
+      }
+
+      /* Style the checkmark/indicator */
+      .container1 .checkmark:after {
+          left: 9px;
+          top: 5px;
+          width: 5px;
+          height: 10px;
+          border: solid white;
+          border-width: 0 3px 3px 0;
+          -webkit-transform: rotate(45deg);
+          -ms-transform: rotate(45deg);
+          transform: rotate(45deg);
+      }
+
+  </style>
+
+
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>AstterEd</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="shortcut icon" type="image/x-icon" href="img/favicon.png">
+  <!-- Place favicon.ico in the root directory -->
+
+  <!-- CSS here -->
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/animate.min.css">
+  <link rel="stylesheet" href="css/magnific-popup.css">
+  <link rel="stylesheet" href="css/fontawesome-all.min.css">
+  <link rel="stylesheet" href="css/owl.carousel.min.css">
+  <link rel="stylesheet" href="css/flaticon.css">
+  <link rel="stylesheet" href="css/odometer.css">
+  <link rel="stylesheet" href="css/aos.css">
+  <link rel="stylesheet" href="css/slick.css">
+  <link rel="stylesheet" href="css/default.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body style="background-color: #141414;">
+
+
+
+
+    <!-- main-area -->
+    <main>
+
+
+
+
+        <div class="container" style="margin-bottom: 5%;">
+
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="movie-history-wrap">
+                        <h3 class="title"><span>Assignment</span></h3>
+
+                        <form style="margin-left: 3%">
+                            <h4 style="line-height: 2;">Q1. Question</h4>
+                            <label class="container1"><h5 style="color:#bdbdbd; font-weight:lighter">One</h5>
+                              <input type="checkbox">
+                              <span class="checkmark"></span>
+                          </label>
+                          <label class="container1"><h5 style="color:#bdbdbd; font-weight:lighter">Two</h5>
+                              <input type="checkbox">
+                              <span class="checkmark"></span>
+                          </label>
+                          <label class="container1"><h5 style="color:#bdbdbd; font-weight:lighter">Three</h5>
+                              <input type="checkbox">
+                              <span class="checkmark"></span>
+                          </label>
+                          <label class="container1"><h5 style="color:#bdbdbd; font-weight:lighter">Four</h5>
+                              <input type="checkbox">
+                              <span class="checkmark"></span>
+                          </label><br>
+
+                          <h4 style="line-height: 2;">Q2. Question</h4>
+                          <label class="container1"><h5 style="color:#bdbdbd; font-weight:lighter">One</h5>
+                              <input type="checkbox">
+                              <span class="checkmark"></span>
+                          </label>
+                          <label class="container1"><h5 style="color:#bdbdbd; font-weight:lighter">Two</h5>
+                              <input type="checkbox">
+                              <span class="checkmark"></span>
+                          </label>
+                          <label class="container1"><h5 style="color:#bdbdbd; font-weight:lighter">Three</h5>
+                              <input type="checkbox">
+                              <span class="checkmark"></span>
+                          </label>
+                          <label class="container1"><h5 style="color:#bdbdbd; font-weight:lighter">Four</h5>
+                              <input type="checkbox">
+                              <span class="checkmark"></span>
+                          </label><br>
+
+                          <br><center><a href="dashboard.html" class="btn">Submit</a></center></form>
+
+                      </form>
+                      <br>
+
+
+
+
+
+
+
+                  </div>
+
+                  
+
+              </div>
+
+
+
+          </div>
+      </div>
+  </div>
+</div>
+
+
+
+
+</main>
+<!-- main-area-end -->
+
+
+
+
+
+
+
+
+<!-- JS here -->
+<script src="js/vendor/jquery-3.6.0.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/isotope.pkgd.min.js"></script>
+<script src="js/imagesloaded.pkgd.min.js"></script>
+<script src="js/jquery.magnific-popup.min.js"></script>
+<script src="js/owl.carousel.min.js"></script>
+<script src="js/jquery.odometer.min.js"></script>
+<script src="js/jquery.appear.js"></script>
+<script src="js/slick.min.js"></script>
+<script src="js/ajax-form.js"></script>
+<script src="js/wow.min.js"></script>
+<script src="js/aos.js"></script>
+<script src="js/plugins.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
