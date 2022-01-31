@@ -53,6 +53,7 @@
         <link rel="stylesheet" href="css/default.css">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/responsive.css">
+        <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
     </head>
     <body style="background-color: #141414;">
 
@@ -83,7 +84,7 @@
                                     <div class="header-action d-none d-md-block">
                                         <ul>
                                                                                       
-                                            <li class="header-btn"><a href="#" class="btn">Wallet</a></li>
+                                            <li class="header-btn"><button id="walletBtn" href="#" class="btn">Wallet</button></li>
                                         </ul>
                                     </div>
                                 </nav>
@@ -136,22 +137,22 @@
                     <div class="pricing-box-wrap">
                         <div class="row justify-content-center">
                             
-                            <div class="col-lg-4 col-md-6 col-sm-8">
+                            <div class="col-lg-6 col-md-6 col-sm-8">
                                 <div class="pricing-box-item active mb-30">
                                     
                                     <div class="pricing-list">
                                         <ul>
-                                            <li class="quality">Initial Amount Staked: <span>500 astter</span></li>
-                                            <li class="quality">Your Rewards: <span>50 astter</span></li>
-                                            <li class="quality">Total Amount Staked: <span>550 astter</span></li>
+                                            <li class="quality">Initial Amount Staked: <span id="userStaked"></span></li>
+                                            <li class="quality">Your Rewards: <span id="reward"></span></li>
+                                            <li class="quality">Total Amount Staked: <span id="total"></span></li>
                                         </ul>
                                     </div>
                                     <div id="outer">
                                     <div class="pricing-btn inner" style="padding: 5px;">
-                                        <a href="" class="btn">Unstake rewards</a>
+                                        <button id="unstakeRewards" class="btn">Unstake rewards</button>
                                     </div>
                                     <div class="pricing-btn inner" style="padding: 5px;">
-                                        <a href="" class="btn">Unsubscribe</a>
+                                        <button id="unsubscribe" class="btn">Unsubscribe</button>
                                     </div>
                                 </div>
                                 <div style="margin-top: 10%; line-height: 2;">If you unsubscribe, you'll unstake the total amount staked. You'll still be able to enjoy the courses, but will not get the rewards.</div>
@@ -164,19 +165,19 @@
                  <div class="pricing-box-wrap">
                         <div class="row justify-content-center">
                             
-                            <div class="col-lg-4 col-md-6 col-sm-8">
+                            <div class="col-lg-6 col-md-6 col-sm-8">
                                 <div class="pricing-box-item active mb-30">
                                     
                                     <div class="pricing-list">
                                         <ul>
-                                            <li class="quality">Backing per $AST <span>Amount</span></li>
+                                            <li  class="quality">Backing per $AST <span id="backing">Amount</span></li>
                                             
-                                            <li class="quality">Total Value Deposited <span>Amount</span></li>
-                                            <li class="quality">Market Value of Treasury Assets <span>Amount</span></li>
+                                            <li  class="quality">Total Value Deposited <span id="deposit">Amount</span></li>
+                                            <li  class="quality">Market Value of Treasury Assets <span id="marketValue">Amount</span></li>
                                             
-                                            <li class="quality">Protocol Owned Liquidity <span>Amount</span></li>
-                                            
-                                            <li class="quality">Total $AST staked <span>Amount</span></li>
+                                            <li  class="quality">Protocol Owned Liquidity <span id="liquidity">Amount</span></li>
+
+                                            <li  class="quality">Total $AST staked <span id="staked">Amount</span></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -199,6 +200,151 @@
 		<!-- JS here -->
         <script>
             //https://speedy-nodes-nyc.moralis.io/2121a9e387697a9756013326/avalanche/testnet
+            const usdtAddress = "0x08a978a0399465621e667C49CD54CC874DC064Eb";
+            const astterAddress = "0xFe9085EB365A4807974FD76335605B939F57168f";
+            const treasuryAddress = "0xcD950132f1F105E1F30b30623574B9F7DDE0Dfc5";
+
+            var stakedAmount, depositAmount, marketValueAmount, backingAmount, liquidityAmount, userStakedAmount, rewardAmount, totalAmount;
+            var staked = document.getElementById("staked");
+            var deposit = document.getElementById("deposit");
+            var marketValue = document.getElementById("marketValue");
+            var backing = document.getElementById("backing");
+            var liquidity = document.getElementById("liquidity");
+            var userStaked = document.getElementById("userStaked");
+            var reward = document.getElementById("reward");
+            var total = document.getElementById("total");
+            var unstakeRewards = document.getElementById("unstakeRewards");
+            var unsubscribe = document.getElementById("unsubscribe");
+
+            var web3admin = new Web3(new Web3.providers.HttpProvider("https://speedy-nodes-nyc.moralis.io/2121a9e387697a9756013326/avalanche/testnet"));
+            var AstterCore, Astter, USDT, web3;
+            var erc20abi, astterCoreABI;
+
+            var walletBtn = document.getElementById("walletBtn");
+
+            const load = async () => {
+                web3 = new Web3(window.ethereum);
+                accounts = await web3.eth.getAccounts();
+                if(accounts[0] != null) {
+                    updateUI();
+                }
+
+                await fetch('../build/contracts/ERC20.json')
+               .then(response => response.json())
+               .then(data => {
+                  erc20abi = data;
+                  USDT = new web3.eth.Contract(erc20abi.abi, usdtAddress);
+                  Astter = new web3.eth.Contract(erc20abi.abi, astterAddress);
+                });
+
+                await fetch('../build/contracts/AstterCore.json')
+               .then(response => response.json())
+               .then(data => {
+                  astterCoreABI = data;
+                  AstterCore = new web3.eth.Contract(astterCoreABI.abi, treasuryAddress);
+                });
+
+                var isSubscribed = await AstterCore.methods.getSubscriptionStatus(accounts[0]).call();
+                if(isSubscribed == 0) {
+                    location.assign("/subscribe.html");
+                }
+
+                userStakedAmount = await AstterCore.methods.getUserStaked(accounts[0]).call();
+                userStaked.innerText = userStakedAmount * (10 ** -18) + " $AST";
+                
+                rewardAmount = await AstterCore.methods.currentReward(accounts[0]).call();
+                reward.innerText = rewardAmount * (10 ** -18) + " $AST" ;
+                
+                total.innerText = ( userStakedAmount * (10 ** -18) ) + ( rewardAmount * (10 ** -18) ) + " $AST";
+
+                stakedAmount = await AstterCore.methods.getTotalStaked().call();
+                depositAmount = await AstterCore.methods.getTotalDeposited().call();
+                liquidityAmount = await AstterCore.methods.getAstterBalanceOfContract().call();
+
+                staked.innerText = stakedAmount * (10 ** -18);
+                deposit.innerText = depositAmount * (10 ** -18) ;
+                liquidity.innerText = liquidityAmount * (10 ** -18) ;
+                backing.innerText = (liquidityAmount/backingAmount) * (10 ** -18);
+
+                const aggregatorV3InterfaceABI = [{ "inputs": [], "name": "decimals", "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "description", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint80", "name": "_roundId", "type": "uint80" }], "name": "getRoundData", "outputs": [{ "internalType": "uint80", "name": "roundId", "type": "uint80" }, { "internalType": "int256", "name": "answer", "type": "int256" }, { "internalType": "uint256", "name": "startedAt", "type": "uint256" }, { "internalType": "uint256", "name": "updatedAt", "type": "uint256" }, { "internalType": "uint80", "name": "answeredInRound", "type": "uint80" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "latestRoundData", "outputs": [{ "internalType": "uint80", "name": "roundId", "type": "uint80" }, { "internalType": "int256", "name": "answer", "type": "int256" }, { "internalType": "uint256", "name": "startedAt", "type": "uint256" }, { "internalType": "uint256", "name": "updatedAt", "type": "uint256" }, { "internalType": "uint80", "name": "answeredInRound", "type": "uint80" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "version", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }]
+                const addr = "0x7898AcCC83587C3C55116c5230C17a6Cd9C71bad"
+                const priceFeed = new web3.eth.Contract(aggregatorV3InterfaceABI, addr)
+                priceFeed.methods.latestRoundData().call()
+                .then((roundData) => {
+                    console.log("Latest Round Data", roundData)
+                    marketValue.innerText = depositAmount * (10 ** -18) * roundData.answer * (10 ** -8);
+                })
+            }
+
+            const updateUI = async () => {
+                var net_id = await web3.eth.net.getId();
+                if(net_id == 43113){
+                    accounts = await web3.eth.getAccounts();
+                    
+                    walletBtn.innerText = accounts[0].substring(0, 5) + "..." + accounts[0].substring(38, 42);
+                    console.log(accounts[0]);              
+                }else{
+                    alert("Please switch to Avalanche Fuji Testnet");
+                }
+            }
+            
+
+            walletBtn.addEventListener("click", async () => {
+                if(window.ethereum){
+                    try{
+                        web3 = new Web3(window.ethereum);
+                        await window.ethereum.enable();
+
+                        updateUI();
+                    }catch(err){
+                        alert(err);
+                    }
+                }else{
+                    alert("Please install a web3 wallet to proceed");
+                }
+            });
+
+            unstakeRewards.addEventListener("click", async () => {
+                if(rewardAmount == 0) {
+                    alert("You have not earned rewards yet");
+                }else{
+                    var unstakeFunctionData = AstterCore.methods.withdrawReward().encodeABI();
+                    await web3.eth.sendTransaction({from: accounts[0], data: unstakeFunctionData, to: treasuryAddress})
+                    .on('transactionHash', async function(hash){
+                        
+                    })
+                    .on('receipt', async function(receipt){
+                        console.log(receipt);
+                        alert("Rewards redeemed successfully");
+                    })
+                    .on('confirmation', function(confirmationNumber, receipt){
+                        
+                    })
+                    .on('error', function(error, receipt) {
+                        console.log(error);
+                    });
+                }
+            });
+
+            unsubscribe.addEventListener("click", async () => {
+                var unsubscribeFndata = AstterCore.methods.unstake().encodeABI();
+                await web3.eth.sendTransaction({from: accounts[0], data: unsubscribeFndata, to: treasuryAddress})
+                .on('transactionHash', async function(hash){
+                    
+                })
+                .on('receipt', async function(receipt){
+                    console.log(receipt);
+                    alert("Funds redeemed successfully");
+                })
+                .on('confirmation', function(confirmationNumber, receipt){
+                    
+                })
+                .on('error', function(error, receipt) {
+                    console.log(error);
+                });
+            });
+
+            load();
         </script>
         <script src="js/vendor/jquery-3.6.0.min.js"></script>
         <script src="js/popper.min.js"></script>

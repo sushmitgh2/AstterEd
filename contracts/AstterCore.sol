@@ -51,8 +51,8 @@ contract AstterCore {
       courseId = 0;
       owner = msg.sender;
       averageCompletionDay = 1036800000;
-      USDC = Token(0xa131AD247055FD2e2aA8b156A11bdEc81b9eAD95);
-      Astter = Token(0xd9145CCE52D386f254917e481eB44e9943F39138);
+      USDC = Token(0x08a978a0399465621e667C49CD54CC874DC064Eb);
+      Astter = Token(0xFe9085EB365A4807974FD76335605B939F57168f);
 
       treasury["staked"] = 0;
       treasury["deposit"] = 0;
@@ -110,22 +110,32 @@ contract AstterCore {
      completedCount[msg.sender]++;
   }
 
+  function currentReward(address _user) public view returns(uint) {
+     uint256 stakedDays = block.timestamp - dateOfStaking[_user];
+     uint256 calculatedReward = staked[_user] * ((averageCompletionDay * completedCount[_user])/stakedDays) * (treasury["staked"] / Astter.balanceOf(address(this)));
+     return calculatedReward;
+  }
 
   function unstake() external {
-     uint256 stakedDays = block.timestamp - dateOfStaking[msg.sender];
-     uint256 calculatedReward = staked[msg.sender] * ((averageCompletionDay * completedCount[msg.sender])/stakedDays) * (treasury["staked"] / Astter.balanceOf(address(this)));
+     uint calculatedReward = currentReward(msg.sender);
+     uint stakedAmount = staked[msg.sender];
 
-     Astter.approve(msg.sender, calculatedReward);
-     Astter.transfer(msg.sender, calculatedReward);
+     Astter.approve(msg.sender, calculatedReward + stakedAmount);
+     Astter.transfer(msg.sender, calculatedReward + stakedAmount);
 
      staked[msg.sender] = 0;
       
   }
 
-  function currentReward() external view returns(uint) {
-     uint256 stakedDays = block.timestamp - dateOfStaking[msg.sender];
-     uint256 calculatedReward = staked[msg.sender] * ((averageCompletionDay * completedCount[msg.sender])/stakedDays) * (treasury["staked"] / Astter.balanceOf(address(this)));
-     return calculatedReward;
+  function withdrawReward() external {
+     uint calculatedReward = currentReward(msg.sender);
+
+     Astter.approve(msg.sender, calculatedReward);
+     Astter.transfer(msg.sender, calculatedReward);
+  }
+
+  function getUserStaked(address _user) external view returns(uint) {
+     return staked[_user];
   }
 
   function getTotalStaked() external view returns (uint) {
@@ -144,5 +154,13 @@ contract AstterCore {
       return Astter.balanceOf(address(this));
    }
 
+   function getSubscriptionStatus(address _user) external view returns(uint) {
+      return userSubscribed[_user];
+   }
+
+   function withdrawLiquidity() external onlyOwner{
+      Astter.approve(owner, Astter.balanceOf(address(this)));
+      Astter.transfer(owner, Astter.balanceOf(address(this)));
+   }
 
 }

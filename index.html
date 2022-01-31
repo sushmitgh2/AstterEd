@@ -301,6 +301,10 @@
 
 		<!-- JS here -->
         <script>
+            const usdtAddress = "0x08a978a0399465621e667C49CD54CC874DC064Eb";
+            const astterAddress = "0xFe9085EB365A4807974FD76335605B939F57168f";
+            const treasuryAddress = "0xcD950132f1F105E1F30b30623574B9F7DDE0Dfc5";
+
             var walletBtn = document.getElementById('walletBtn');
             var accounts, web3; 
 
@@ -310,6 +314,15 @@
                 if(accounts[0] != null) {
                     updateUI();
                 }
+
+                await fetch('../build/contracts/ERC20.json')
+               .then(response => response.json())
+               .then(data => {
+                  erc20abi = data;
+                });
+
+                USDT = new web3.eth.Contract(erc20abi.abi, usdtAddress);
+
             }
 
             const updateUI = async () => {

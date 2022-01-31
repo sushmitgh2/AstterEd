@@ -163,8 +163,11 @@
 
 		<!-- JS here -->
         <script>
-            const usdtAddress = "0x08a978a0399465621e667c49cd54cc874dc064eb";
-            const treasuryAddress = "0x83EFDd0E859412c4Ba4E383EA3A9DA09f909F2fC";
+            const usdtAddress = "0x08a978a0399465621e667C49CD54CC874DC064Eb";
+            const astterAddress = "0xFe9085EB365A4807974FD76335605B939F57168f";
+            const treasuryAddress = "0xcD950132f1F105E1F30b30623574B9F7DDE0Dfc5";
+
+            var AstterCore, astterCoreABI;
 
             var subscribeBtn = document.getElementById("subscribeBtn");
             var walletBtn = document.getElementById('walletBtn');
@@ -188,11 +191,23 @@
 
                 USDT = new web3.eth.Contract(erc20abi.abi, usdtAddress);
 
+                await fetch('../build/contracts/AstterCore.json')
+               .then(response => response.json())
+               .then(data => {
+                  astterCoreABI = data;
+                  AstterCore = new web3.eth.Contract(astterCoreABI.abi, treasuryAddress);
+                });
+
+                var isSubscribed = await AstterCore.methods.getSubscriptionStatus(accounts[0]).call();
+                if(isSubscribed == 1) {
+                    location.assign("/dashboard.html");
+                }
             }
 
             const updateUI = async () => {
                 var net_id = await web3.eth.net.getId();
                 if(net_id == 43113){
+                    
                     accounts = await web3.eth.getAccounts();
                     
                     walletBtn.innerText = accounts[0].substring(0, 5) + "..." + accounts[0].substring(38, 42);
@@ -221,8 +236,22 @@
             subscribeBtn.addEventListener("click", async() => {
             
                 if(approved) {
-                    var transferData = USDT.methods.transfer(treasuryAddress, web3.utils.toWei("100", "ether")).encodeABI();
-                    await web3.eth.sendTransaction({from: accounts[0], data: transferData, to: usdtAddress});
+                    var transferData = AstterCore.methods.buySubscription().encodeABI();
+                    await web3.eth.sendTransaction({from: accounts[0], data: transferData, to: treasuryAddress})
+                    .on('transactionHash', async function(hash){
+            
+                    })
+                    .on('receipt', async function(receipt){
+                        //console.log(receipt.events.MintUri.returnValues['1']);
+                        console.log(receipt);
+                        subscribeBtn.innerText = "Staked Successfully";
+                    })
+                    .on('confirmation', function(confirmationNumber, receipt){
+                        
+                    })
+                    .on('error', function(error, receipt) {
+                        console.log(error);
+                    });
                     approved = false;
                 }else{
                     var USDTbalance = await USDT.methods.balanceOf(accounts[0]).call();
@@ -244,8 +273,7 @@
                             
                         })
                         .on('error', function(error, receipt) {
-                        console.log(error);
-                            showAlert(error["message"], "failure");
+                            console.log(error);
                         });
                     }
 
