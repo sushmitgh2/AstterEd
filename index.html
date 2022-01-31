@@ -302,15 +302,28 @@
 		<!-- JS here -->
         <script>
             var walletBtn = document.getElementById('walletBtn');
-            var accounts; 
+            var accounts, web3; 
 
-            const signMessage = async() => {
-                await web3.eth.personal.sign(web3.utils.fromUtf8(`Get ready to enter the vast world of AstterEd. But before you do so, we just need to verify it is you. Approve this message and you are in.`),
-                accounts[0], (err, signature) => {
-                    if (err) console.log(err);
-                    console.log(signature);
-                })
+            const load = async () => {
+                web3 = new Web3(window.ethereum);
+                accounts = await web3.eth.getAccounts();
+                if(accounts[0] != null) {
+                    updateUI();
+                }
             }
+
+            const updateUI = async () => {
+                var net_id = await web3.eth.net.getId();
+                if(net_id == 43113){
+                    accounts = await web3.eth.getAccounts();
+                    
+                    walletBtn.innerText = accounts[0].substring(0, 5) + "..." + accounts[0].substring(38, 42);
+                    console.log(accounts[0]);              
+                }else{
+                    alert("Please switch to Avalanche Fuji Testnet");
+                }
+            }
+            
 
             walletBtn.addEventListener("click", async () => {
                 if(window.ethereum){
@@ -318,17 +331,7 @@
                         web3 = new Web3(window.ethereum);
                         await window.ethereum.enable();
 
-                        var net_id = await web3.eth.net.getId();
-                        if(net_id == 43113){
-                            accounts = await web3.eth.getAccounts();
-
-                            
-
-                            walletBtn.innerText = accounts[0].substring(0, 5) + "..." + accounts[0].substring(38, 42);
-                            console.log(accounts[0]);              
-                        }else{
-                            alert("Please switch to Avalanche Fuji Testnet");
-                        }
+                        updateUI();
                     }catch(err){
                         alert(err);
                     }
@@ -336,6 +339,8 @@
                     alert("Please install a web3 wallet to proceed");
                 }
             })
+
+            load();
         </script>
         <script src="js/vendor/jquery-3.6.0.min.js"></script>
         <script src="js/popper.min.js"></script>

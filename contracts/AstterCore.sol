@@ -11,7 +11,7 @@ contract AstterCore {
      uint256 duration;
   }
 
-  struct Subscription{
+  struct Course{
       string name;
       string cover_photo;
       uint256 timestamp;
@@ -19,19 +19,27 @@ contract AstterCore {
       Video[] videos;
   }
 
-  uint256 subId;
   uint256 userId;
+  uint256 courseId;
   address owner;
-  IERC20 private Astter;
-  IERC20 private USDC;
+  uint averageCompletionDay;
+  Token private Astter;
+  Token private USDC;
 
   event UserAdded(address indexed _user, uint256 timestamp);
-  event SubscriptionAdded(uint256 indexed _subId, string name, uint256 timestamp);
-  event SubscriptionPurchased(address indexed _user, uint256 indexed _subId, uint256 timestamp);
+  event CourseAdded(uint256 indexed _subId, string name, uint256 timestamp);
+  event SubscriptionPurchased(address indexed _user, uint256 timestamp);
 
   mapping(address => uint256) users; 
-  mapping(uint => Subscription) subscriptionsAvailable;
-  mapping(address => uint256) subscriptionsBoughtByUser;
+  mapping(uint => Course) courses;
+  Course[] coursesArr;
+  mapping(address => uint) userSubscribed;
+
+  mapping(address => uint256) staked;
+  mapping(address => uint256) dateOfStaking;
+  mapping(address => mapping(uint => uint)) completed;
+  mapping(address => uint) completedCount;
+  mapping(string => uint) treasury; 
 
   modifier onlyOwner() {
      require(msg.sender == owner, "Only owner of the contract can make edits");
@@ -39,11 +47,12 @@ contract AstterCore {
   }
 
   constructor() {
-      subId = 0;
       userId = 0;
+      courseId = 0;
       owner = msg.sender;
-      USDC = Token(0x5425890298aed601595a70AB815c96711a31Bc65);
-      Astter = Token(0x5425890298aed601595a70AB815c96711a31Bc65);
+      averageCompletionDay = 1036800000;
+      USDC = Token(0xa131AD247055FD2e2aA8b156A11bdEc81b9eAD95);
+      Astter = Token(0xd9145CCE52D386f254917e481eB44e9943F39138);
   }
 
   function addUser() external {
@@ -52,35 +61,67 @@ contract AstterCore {
     userId++;
   }
 
-  function addSubscription(string memory _name, string memory _cover_photo) external onlyOwner{
-     Subscription storage sub = subscriptionsAvailable[subId];
+  function addCourse(string memory _name, string memory _cover_photo) external onlyOwner{
+     Course storage sub = courses[courseId];
      sub.name = _name;
      sub.cover_photo = _cover_photo;
      sub.timestamp = block.timestamp;
      sub.vidCount = 0;
 
-     emit SubscriptionAdded(subId, _name, block.timestamp);
-     subId++;
+     coursesArr.push(sub);
+     emit CourseAdded(courseId, _name, block.timestamp);
+     courseId++;
   }
 
-  function addVideos(uint256 _sub, string memory _name, string memory _url, uint256 _duration) external onlyOwner{
-     Subscription storage sub = subscriptionsAvailable[_sub];
+  function addVideos(uint256 _course, string memory _name, string memory _url, uint256 _duration) external onlyOwner{
+     Course storage sub = courses[_course];
      sub.videos.push(Video(sub.vidCount, _name, _url, _duration));
      sub.vidCount++;
   }
 
   function getVideos(uint256 _sub) external view returns(Video[] memory){
-     return subscriptionsAvailable[_sub].videos;
+     return courses[_sub].videos;
   }
 
-  function buySubscription(uint256 _userId, uint256 _subId) external payable{
-     uint256 allowance = USDC.allowance(msg.sender, address(this));
-     require(allowance >= 500 * (10 ** 18), "Check the token allowance");
-     USDC.transferFrom(msg.sender, address(this), 500 * (10 ** 18));
-     Astter.mint(msg.sender, 500 * (10 ** 18));
+  function buySubscription() external{
+     uint256 subAmount = 100 * (10 ** USDC.decimals());
+
+     USDC.transferFrom(msg.sender, address(this), subAmount);
+
+     Astter.approve(msg.sender, subAmount);
+     Astter.transfer(msg.sender, subAmount);
+
+     treasury["staked"] = subAmount;
+     staked[msg.sender] = subAmount;
+     dateOfStaking[msg.sender] = block.timestamp;
+
+     userSubscribed[msg.sender] = 1;
+     emit SubscriptionPurchased(msg.sender, block.timestamp);
   }
 
-  function getBalance() external returns(uint256){
-     Astter.balanceOf(msg.sender);
+  function completeCourse(uint _courseId) external onlyOwner {
+     require(courseId > 0, "Courses have not been initialized");
+     require(completed[msg.sender][_courseId] == 1, "Course has already been completed");
+     completed[msg.sender][_courseId] = 1;
+     completedCount[msg.sender]++;
   }
+
+
+  function unstake() external {
+     uint256 stakedDays = block.timestamp - dateOfStaking[msg.sender];
+     uint256 calculatedReward = staked[msg.sender] * ((averageCompletionDay * completedCount[msg.sender])/stakedDays) * (treasury["staked"] / Astter.balanceOf(address(this)));
+
+     Astter.approve(msg.sender, calculatedReward);
+     Astter.transfer(msg.sender, calculatedReward);
+
+     staked[msg.sender] = 0;
+      
+  }
+
+  function currentReward() external view returns(uint) {
+     uint256 stakedDays = block.timestamp - dateOfStaking[msg.sender];
+     uint256 calculatedReward = staked[msg.sender] * ((averageCompletionDay * completedCount[msg.sender])/stakedDays) * (treasury["staked"] / Astter.balanceOf(address(this)));
+     return calculatedReward;
+  }
+
 }

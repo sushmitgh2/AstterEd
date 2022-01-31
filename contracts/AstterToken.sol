@@ -499,7 +499,7 @@ abstract contract Ownable is Context {
      * @dev Throws if called by any account other than the owner.
      */
     modifier onlyOwner() {
-        require(owner() == _msgSender(), "Ownable: caller is not the owner");
+        require(owner() == msg.sender, "Ownable: caller is not the owner");
         _;
     }
 
@@ -532,16 +532,9 @@ abstract contract Ownable is Context {
 
 contract Token is ERC20, Ownable{
 
-  IERC20 private USDC;
-
   constructor(string memory name, string memory symbol, uint256 initialSupply) ERC20(name, symbol){
-      USDC = IERC20(0x5425890298aed601595a70AB815c96711a31Bc65);
       _setOwner(msg.sender);
       _mint(msg.sender, initialSupply * (10 ** 18));
-  }
-
-  function mint(address recipient, uint256 amount) external {
-      _mint(recipient, amount * (10 ** 18));
   }
 
 }

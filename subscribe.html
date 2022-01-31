@@ -27,6 +27,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
 		<link rel="shortcut icon" type="image/x-icon" href="img/favicon.png">
+        <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
         <!-- Place favicon.ico in the root directory -->
 
 		<!-- CSS here -->
@@ -72,7 +73,7 @@
                                     <div class="header-action d-none d-md-block">
                                         <ul>
                                                                                       
-                                            <li class="header-btn"><a href="#" class="btn">Wallet</a></li>
+                                            <li class="header-btn"><button id="walletBtn" class="btn">Wallet</button></li>
                                         </ul>
                                     </div>
                                 </nav>
@@ -142,7 +143,7 @@
                                         </ul>
                                     </div>
                                     <div class="pricing-btn">
-                                        <a href="" class="btn">Subscribe and Stake</a>
+                                        <button id="subscribeBtn" class="btn">Subscribe and Stake</button>
                                     </div>
                                 </div>
                             </div>
@@ -161,6 +162,99 @@
 
 
 		<!-- JS here -->
+        <script>
+            const usdtAddress = "0x08a978a0399465621e667c49cd54cc874dc064eb";
+            const treasuryAddress = "0x83EFDd0E859412c4Ba4E383EA3A9DA09f909F2fC";
+
+            var subscribeBtn = document.getElementById("subscribeBtn");
+            var walletBtn = document.getElementById('walletBtn');
+            var accounts, web3, erc20abi, USDT; 
+
+
+            var approved = false;
+
+            const load = async () => {
+                web3 = new Web3(window.ethereum);
+                accounts = await web3.eth.getAccounts();
+                if(accounts[0] != null) {
+                    updateUI();
+                }
+
+                await fetch('../build/contracts/ERC20.json')
+               .then(response => response.json())
+               .then(data => {
+                  erc20abi = data;
+                });
+
+                USDT = new web3.eth.Contract(erc20abi.abi, usdtAddress);
+
+            }
+
+            const updateUI = async () => {
+                var net_id = await web3.eth.net.getId();
+                if(net_id == 43113){
+                    accounts = await web3.eth.getAccounts();
+                    
+                    walletBtn.innerText = accounts[0].substring(0, 5) + "..." + accounts[0].substring(38, 42);
+                    console.log(accounts[0]);              
+                }else{
+                    alert("Please switch to Avalanche Fuji Testnet");
+                }
+            }
+            
+
+            walletBtn.addEventListener("click", async () => {
+                if(window.ethereum){
+                    try{
+                        web3 = new Web3(window.ethereum);
+                        await window.ethereum.enable();
+
+                        updateUI();
+                    }catch(err){
+                        alert(err);
+                    }
+                }else{
+                    alert("Please install a web3 wallet to proceed");
+                }
+            })
+
+            subscribeBtn.addEventListener("click", async() => {
+            
+                if(approved) {
+                    var transferData = USDT.methods.transfer(treasuryAddress, web3.utils.toWei("100", "ether")).encodeABI();
+                    await web3.eth.sendTransaction({from: accounts[0], data: transferData, to: usdtAddress});
+                    approved = false;
+                }else{
+                    var USDTbalance = await USDT.methods.balanceOf(accounts[0]).call();
+
+                    if(USDTbalance >= web3.utils.toWei("100", "ether")) {
+                        var approveData = USDT.methods.approve(treasuryAddress, web3.utils.toWei("100", "ether")).encodeABI();
+
+                        await web3.eth.sendTransaction({from: accounts[0], data: approveData, to: usdtAddress})
+                        .on('transactionHash', async function(hash){
+                
+                        })
+                        .on('receipt', async function(receipt){
+                            //console.log(receipt.events.MintUri.returnValues['1']);
+                            console.log(receipt);
+                            subscribeBtn.innerText = "SEND USDT";
+                            approved = true;
+                        })
+                        .on('confirmation', function(confirmationNumber, receipt){
+                            
+                        })
+                        .on('error', function(error, receipt) {
+                        console.log(error);
+                            showAlert(error["message"], "failure");
+                        });
+                    }
+
+                }
+                
+            });
+
+            load();
+        </script>
         <script src="js/vendor/jquery-3.6.0.min.js"></script>
         <script src="js/popper.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
