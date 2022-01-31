@@ -53,6 +53,9 @@ contract AstterCore {
       averageCompletionDay = 1036800000;
       USDC = Token(0xa131AD247055FD2e2aA8b156A11bdEc81b9eAD95);
       Astter = Token(0xd9145CCE52D386f254917e481eB44e9943F39138);
+
+      treasury["staked"] = 0;
+      treasury["deposit"] = 0;
   }
 
   function addUser() external {
@@ -87,6 +90,7 @@ contract AstterCore {
      uint256 subAmount = 100 * (10 ** USDC.decimals());
 
      USDC.transferFrom(msg.sender, address(this), subAmount);
+     treasury["deposit"] = treasury["deposit"] + subAmount;
 
      Astter.approve(msg.sender, subAmount);
      Astter.transfer(msg.sender, subAmount);
@@ -123,5 +127,22 @@ contract AstterCore {
      uint256 calculatedReward = staked[msg.sender] * ((averageCompletionDay * completedCount[msg.sender])/stakedDays) * (treasury["staked"] / Astter.balanceOf(address(this)));
      return calculatedReward;
   }
+
+  function getTotalStaked() external view returns (uint) {
+     return treasury["staked"];
+  }
+
+  function getTotalDeposited() external view returns(uint) {
+     return treasury["deposit"];
+  }
+
+  function getTotalAstterSupply() external view returns(uint) {
+     return Astter.totalSupply();
+  }
+
+   function getAstterBalanceOfContract() external view returns(uint) {
+      return Astter.balanceOf(address(this));
+   }
+
 
 }
